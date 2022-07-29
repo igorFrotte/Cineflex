@@ -23,7 +23,7 @@ const Base = styled.div`
     align-items: center;
 
     & > div {
-        width: 380px;
+        width: 375px;
         display: flex;
     }
     & > div > div:first-child {

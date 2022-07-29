@@ -1,5 +1,6 @@
-export default function Sucesso({oi}) {
+export default function Sucesso({pedido}) {
+  console.log(pedido);
     return (
-      <>{oi}</>
+      <></>
     );
 }

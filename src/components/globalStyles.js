@@ -50,6 +50,9 @@ table {
 strong {
 	font-weight: bold;
 }
+button {
+	border: initial;
+}
 
   * {
     box-sizing: border-box;

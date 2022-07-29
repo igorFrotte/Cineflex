@@ -4,7 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Rodape from "./Rodape";
 
-export default function Filme({setPedido}) {
+export default function Filme() {
 
   const [filme,setFilme] = useState(null);
   const {idFilme} = useParams();
