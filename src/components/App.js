@@ -9,7 +9,7 @@ import Sucesso from "./Sucesso";
 
 export default function App() {
 
-  const [oi, setOi] = useState("");
+  const [pedido, setPedido] = useState([]);
 
     return (
       <>
@@ -18,9 +18,9 @@ export default function App() {
           <Topo />
           <Routes>
             <Route path="/" element={<Cartaz />} />
-            <Route path="/filme/:idFilme" element={<Filme setOi={setOi} />} />
+            <Route path="/filme/:idFilme" element={<Filme setPedido={setPedido} />} />
             <Route path="/sessao/:idSessao" element={<Sessao />} />
-            <Route path="/sucesso" element={<Sucesso oi={oi} />} />
+            <Route path="/sucesso" element={<Sucesso pedido={pedido} />} />
           </Routes>
         </BrowserRouter>
       </>

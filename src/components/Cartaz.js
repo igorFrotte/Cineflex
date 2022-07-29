@@ -12,9 +12,7 @@ export default function Cartaz() {
     promisse.then(resposta => setFilmes(resposta.data));
   },[]);
 
-  console.log(filmes);
-
-  if(filmes === null){ return <>Carregando...</>}
+  if(filmes === null){ return <Titulo>Carregando...</Titulo>}
 
     return (
       <>
@@ -22,9 +20,9 @@ export default function Cartaz() {
         <Filmes>
           {filmes.map((e) => {
             return (
-              <Link to={"/filme/" + e.id} >
+              <Link key={e.id} to={"/filme/" + e.id} >
                 <div>
-                  <img src={e.posterURL} />
+                  <img alt={e.title} src={e.posterURL} />
                 </div>
               </Link>
             );
