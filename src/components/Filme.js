@@ -6,21 +6,21 @@ import Rodape from "./Rodape";
 
 export default function Filme({setPedido}) {
 
-  const [sessoes,setSessoes] = useState(null);
+  const [filme,setFilme] = useState(null);
   const {idFilme} = useParams();
 
   useEffect(() => {
     const promisse = axios.get(`https://mock-api.driven.com.br/api/v7/cineflex/movies/${idFilme}/showtimes`);
-    promisse.then(resposta => setSessoes(resposta.data));
+    promisse.then(resposta => setFilme(resposta.data));
   },[]);
 
-  if(sessoes === null){ return <Titulo>Carregando...</Titulo>}
+  if(filme === null){ return <Titulo>Carregando...</Titulo>}
 
     return (
       <>
         <Titulo>Selecione o horário</Titulo>
         <TodaSessao>
-          {sessoes.days.map((e, index) => {
+          {filme.days.map((e, index) => {
             return (
               <div key={index}>
                 <p>{e.weekday+" - "+e.date}</p>
@@ -36,7 +36,12 @@ export default function Filme({setPedido}) {
           })}
         </TodaSessao>
         <Rodape>
-          <div>oi</div>
+          <div>
+            <img src={filme.posterURL} alt={filme.title} />
+          </div>
+          <div>
+            <p>{filme.title}</p>
+          </div>
         </Rodape>
       </>
     );
@@ -61,6 +66,7 @@ const TodaSessao = styled.div`
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 130px;
 
   & > div {
     width: 350px;
