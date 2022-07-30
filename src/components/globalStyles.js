@@ -53,6 +53,9 @@ strong {
 button {
 	border: initial;
 }
+a {
+	text-decoration: none; 
+}
 
   * {
     box-sizing: border-box;

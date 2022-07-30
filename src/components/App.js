@@ -9,7 +9,7 @@ import Sucesso from "./Sucesso";
 
 export default function App() {
 
-  const [pedido, setPedido] = useState({});
+  const [pedido, setPedido] = useState(null);
 
     return (
       <>

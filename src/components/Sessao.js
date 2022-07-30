@@ -75,8 +75,14 @@ export default function Sessao({setPedido}) {
         <Formulario>
           <form onSubmit={(e) => {
             e.preventDefault();
-            //API
-            setPedido({ids: cadeiras, compradores: compradores});
+            let obj = {ids: cadeiras, compradores: compradores};
+            //API com obj
+            setPedido({
+              ...obj, 
+              nAssentos: nAssentos,
+              titulo: sessao.movie.title, 
+              dataHora: sessao.day.date+" "+sessao.name
+            });
             navigate('/sucesso');
           }}>
             {cadeiras.map((e, index) => <Comprador compradores={compradores} index={index} nAssento={nAssentos[index]} key={index} /> )}
