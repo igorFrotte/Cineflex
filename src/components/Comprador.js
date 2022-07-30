@@ -1,4 +1,4 @@
-export default function Comprador({compradores, index, nAssento}) {
+export default function Comprador({erroCPF, compradores, index, nAssento}) {
     
     const comprador = compradores[index];
     
@@ -13,6 +13,7 @@ export default function Comprador({compradores, index, nAssento}) {
             <input required type="text" id={"cpf"+nAssento} placeholder="Digite seu CPF..."
                 onChange={(e) => comprador.cpf = e.target.value}
             />
+            <div>{erroCPF}</div>
         </>
     );
 }

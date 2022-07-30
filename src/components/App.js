@@ -10,17 +10,18 @@ import Sucesso from "./Sucesso";
 export default function App() {
 
   const [pedido, setPedido] = useState(null);
+  const [caminho, setCaminho] = useState(false);
 
     return (
       <>
         <GlobalStyle />
         <BrowserRouter>
-          <Topo />
+          <Topo caminho={caminho} />
           <Routes>
-            <Route path="/" element={<Cartaz />} />
-            <Route path="/filme/:idFilme" element={<Filme />} />
-            <Route path="/sessao/:idSessao" element={<Sessao setPedido={setPedido} />} />
-            <Route path="/sucesso" element={<Sucesso pedido={pedido} />} />
+            <Route path="/" element={<Cartaz setCaminho={setCaminho} />} />
+            <Route path="/filme/:idFilme" element={<Filme setCaminho={setCaminho} />} />
+            <Route path="/sessao/:idSessao" element={<Sessao setCaminho={setCaminho} setPedido={setPedido} />} />
+            <Route path="/sucesso" element={<Sucesso setCaminho={setCaminho} pedido={pedido} />} />
           </Routes>
         </BrowserRouter>
       </>

@@ -4,19 +4,24 @@ import axios from "axios";
 import styled from "styled-components";
 import Rodape from "./Rodape";
 import Comprador from "./Comprador";
+import {validos} from "./validacoes";
 
-export default function Sessao({setPedido}) {
+export default function Sessao({setCaminho, setPedido}) {
 
   const [sessao,setSessao] = useState(null);
   const {idSessao} = useParams();
   const [cadeiras, setCadeiras] = useState([]);
   const [compradores, setCompradores] = useState([]);
   const [nAssentos, setNAssentos] = useState([]);
+  const [erros, setErros] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const promisse = axios.get(`https://mock-api.driven.com.br/api/v7/cineflex/showtimes/${idSessao}/seats`);
-    promisse.then(resposta => setSessao(resposta.data));
+    promisse.then(resposta => {
+      setCaminho("/filme/"+resposta.data.movie.id);
+      setSessao(resposta.data);
+    });
   },[]);
 
   if(sessao === null){ return <Titulo>Carregando...</Titulo>}
@@ -30,9 +35,18 @@ export default function Sessao({setPedido}) {
               if(cadeiras.filter((el) => el === e.id).length > 0){
                 return (
                   <Selecionado onClick={() => {
-                    setNAssentos(nAssentos.filter((el) => el !== e.name));
-                    setCadeiras(cadeiras.filter((el) => el !== e.id));
-                    setCompradores(compradores.filter((el) => el.idAssento !== e.id));
+                    let campos = compradores.filter((el) => el.idAssento === e.id);
+                    if(campos[0].nome !== "" || campos[0].cpf !== ""){
+                      if(window.confirm("Você realmente gostaria de remover esse assento?") === true){
+                        setNAssentos(nAssentos.filter((el) => el !== e.name));
+                        setCadeiras(cadeiras.filter((el) => el !== e.id));
+                        setCompradores(compradores.filter((el) => el.idAssento !== e.id));
+                      }
+                    }else{
+                      setNAssentos(nAssentos.filter((el) => el !== e.name));
+                      setCadeiras(cadeiras.filter((el) => el !== e.id));
+                      setCompradores(compradores.filter((el) => el.idAssento !== e.id));
+                    }                
                   }} key={e.id}>
                     {e.name}
                   </Selecionado>
@@ -75,22 +89,41 @@ export default function Sessao({setPedido}) {
         <Formulario>
           <form onSubmit={(e) => {
             e.preventDefault();
-            let obj = {ids: cadeiras, compradores: compradores};
-            //API com obj
-            setPedido({
-              ...obj, 
-              nAssentos: nAssentos,
-              titulo: sessao.movie.title, 
-              dataHora: sessao.day.date+" "+sessao.name
-            });
-            navigate('/sucesso');
+            let erro = validos(compradores);
+            setErros([...erro]);
+            if(erro.length === 0){
+              let obj = {ids: cadeiras, compradores: compradores};
+              
+              let promisse = axios.post("https://mock-api.driven.com.br/api/v7/cineflex/seats/book-many",obj);
+              promisse.then((res) => {
+                setPedido({
+                  ...obj, 
+                  idSessao: idSessao,
+                  nAssentos: nAssentos,
+                  titulo: sessao.movie.title, 
+                  dataHora: sessao.day.date+" "+sessao.name
+                });
+                navigate('/sucesso');
+              });
+              promisse.catch(() => alert("Algo deu errado!"));
+
+            }           
           }}>
-            {cadeiras.map((e, index) => <Comprador compradores={compradores} index={index} nAssento={nAssentos[index]} key={index} /> )}
+            {compradores.map((e, index) => {
+              let filtraErro = erros.filter((el) => e.idAssento === el.idAssento);
+              let erro = "";
+              if(filtraErro.length > 0){
+                erro = "CPF inválido!";
+              }
+              return (
+                <Comprador erroCPF={erro} compradores={compradores} index={index} nAssento={nAssentos[index]} key={index} />
+              );
+            })}
             {cadeiras.length > 0 ? <button type="submit">Reservar assento(s)</button>: ""}
           </form>
         </Formulario>
         <Rodape>
-          <div onClick={() => console.log(compradores)}>
+          <div>
             <img src={sessao.movie.posterURL} alt={sessao.movie.title} />
           </div>
           <div>
@@ -185,6 +218,8 @@ const Formulario = styled.div`
     border: 1px solid #D5D5D5;
     border-radius: 3px;
     padding: 10px;
+    font-size: 18px;
+    line-height: 21px;
   }
   input::placeholder {
     font-style: italic;
@@ -206,5 +241,9 @@ const Formulario = styled.div`
     color: #FFFFFF;
     margin: 50px auto 130px auto;
     cursor: pointer;
+  }
+  div {
+    margin: 5px;
+    color: red;
   }
 `;

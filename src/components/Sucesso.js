@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import Ingresso from "./Ingresso";
 
-export default function Sucesso({pedido}) {
+export default function Sucesso({setCaminho, pedido}) {
 
+  useEffect(() => {
+    setCaminho("/sessao/"+pedido.idSessao);
+  }, []); 
+  
   if(pedido === null){ return <Infos><Link to="/"><button>Voltar pra Home</button></Link></Infos>}
 
     return (
@@ -84,7 +89,7 @@ const Infos = styled.div`
     justify-content: center;
     letter-spacing: 0.04em;
     color: #FFFFFF;
-    margin: 80px auto 0 auto;
+    margin: 80px auto 50px auto;
     cursor: pointer;
   }
 `;

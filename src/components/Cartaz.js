@@ -3,13 +3,16 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-export default function Cartaz() {
+export default function Cartaz({setCaminho}) {
 
   const [filmes,setFilmes] = useState(null);
 
   useEffect(() => {
     const promisse = axios.get("https://mock-api.driven.com.br/api/v7/cineflex/movies");
-    promisse.then(resposta => setFilmes(resposta.data));
+    promisse.then(resposta => {
+      setCaminho(false);
+      setFilmes(resposta.data);
+    });
   },[]);
 
   if(filmes === null){ return <Titulo>Carregando...</Titulo>}

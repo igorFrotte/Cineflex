@@ -4,14 +4,17 @@ import axios from "axios";
 import styled from "styled-components";
 import Rodape from "./Rodape";
 
-export default function Filme() {
+export default function Filme({setCaminho}) {
 
   const [filme,setFilme] = useState(null);
   const {idFilme} = useParams();
 
   useEffect(() => {
     const promisse = axios.get(`https://mock-api.driven.com.br/api/v7/cineflex/movies/${idFilme}/showtimes`);
-    promisse.then(resposta => setFilme(resposta.data));
+    promisse.then(resposta => {
+      setCaminho("/");
+      setFilme(resposta.data);
+    });
   },[]);
 
   if(filme === null){ return <Titulo>Carregando...</Titulo>}
