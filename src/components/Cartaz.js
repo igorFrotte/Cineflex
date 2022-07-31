@@ -51,7 +51,8 @@ const Titulo = styled.div`
 const Filmes = styled.div`
   display: flex;
   flex-wrap: wrap;
-  width: 100vw;
+  max-width: 850px;
+  margin: auto;
   justify-content: space-evenly;
 
   a {
